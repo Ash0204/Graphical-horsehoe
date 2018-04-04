@@ -1,6 +1,6 @@
 # Complete GHS module
 # Defining the function
-GHS_updated <- function(S,n,burnin,nmc)
+GHS_est <- function(S,n,burnin,nmc)
 {
   # GHS MCMC sampler using data-augmented
   # block (column-wise) Gibbs sampler
@@ -71,7 +71,7 @@ GHS_updated <- function(S,n,burnin,nmc)
       inv_Omega_11 <- Sigma_11 - (sigma_12%*%t(sigma_12))/sigma_22
       inv_C <- s_22*inv_Omega_11 + diag(1/(as.vector(lambda_sq_12)*tau_sq))
       inv_C_chol <- chol(inv_C)
-      mu_i <- matrix(solve(-inv_C,s_21))
+      mu_i <- matrix(solve(-inv_C,s_21,tol = 1e-25))
       beta_def <- mu_i+ matrix(solve(inv_C_chol,rnorm(p-1,0,1)))
       omega_12 <- beta_def
       omega_22 <- gamma_sample + (t(beta_def)%*%inv_Omega_11%*%beta_def)
